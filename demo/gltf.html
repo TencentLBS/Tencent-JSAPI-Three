@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>map</title>
+  <meta charset='utf-8'>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <style>
+    * {
+      padding: 0px;
+      margin: 0px;
+    }
+
+    #mapContainer {
+      width: 100vw;
+      height: 100vh;
+    }
+  </style>
+  <script charset="utf-8"
+    src="https://wemapvis.map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"></script>
+</head>
+
+<body>
+  <div id='mapContainer'></div>
+  <script>
+    var myMap;
+    myMap = new TMap.Map('mapContainer', {
+      zoom: 18,
+      center: new TMap.LatLng(39.98288912162261, 116.31162973812388),
+      pitch: 70,
+      rotation: -45,
+      baseMap: [{
+        type: 'vector',
+        features: ['base', 'building3d']
+      }],
+    });
+  </script>
+  <script type="module">
+    import GLTFModel from "../src/model/GLTFModel.js";
+    const modelOutline = [
+      new TMap.LatLng(39.98326338032132, 116.31242603336543),
+      new TMap.LatLng(39.98326847760324, 116.31367964173842),
+      new TMap.LatLng(39.982596422528815, 116.31369940731383),
+      new TMap.LatLng(39.982550566785186, 116.31250303019806),
+    ];
+
+    // 显示遮罩面
+    const polygon = new TMap.MultiPolygon({
+      map: myMap,
+      geometries: [
+        {
+          id: 'building_0',
+          paths: modelOutline
+        }
+      ],
+    });
+
+    // 添加GLTF模型
+    const model = new GLTFModel({
+      map: myMap,
+      url: './low_poly_building/scene.gltf',
+      scale: 100,
+      rotation: [0, 0, 0],
+      position: new TMap.LatLng(39.98285384542575, 116.31309359855004),
+      mask: modelOutline,
+    });
+  </script>
+</body>
